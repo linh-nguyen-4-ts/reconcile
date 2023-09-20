@@ -1,0 +1,315 @@
+---
+classoption: portrait
+geometry: left=2.5cm,right=2cm,top=2.5cm,bottom=3cm
+header-includes: \usepackage{vntex} \usepackage{float}
+mainfont: Times New Roman
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r include=FALSE}
+###!!!! always need to change
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, r,echo=FALSE}
+options(scipen=99)
+library(dplyr)
+library(readxl)
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(knitr)
+library(kableExtra)
+library(pander)
+library(stringr)
+library(janitor)
+
+rm(list=ls())
+
+ report_mon = format(Sys.Date()-30,'%Y-%m')
+ mon = paste0(substr(report_mon,6,7),"-",substr(report_mon,1,4))
+#   
+path = '~/LG/lotte/Rmd'
+file_recon <- paste0(path,"/Lotte_detail_leads_by_sender_",report_mon,".xlsx")
+
+avay <- read_excel(file_recon,sheet = "Sheet1") %>% filter(channel.y=='AVAY',sender=='AVAY',telco_code=='vinaphone')%>% 
+  select(score_range,loan_amount,price) %>% rename(fee_no_vat=price)
+#unit_price <- data_frame("score_range"=c('no_score'))
+score <- c('no_score')
+name <- c(paste0('Tìm kiếm khách hàng ',report_mon))
+scheme <- c('3,5%')
+service <- data.frame(score,name,scheme)
+
+#Make a Summary Table
+df_summary <- avay %>% 
+     group_by(score_range) %>% 
+     summarise(fee_no_vat = sum(fee_no_vat),loan_amount=sum(loan_amount)) %>%
+   data.table()
+#df_summary <- left_join(df_summary,unit_price,by="score_range")
+df_summary <- left_join(df_summary,service,by=c("score_range"="score")) %>% select(name,loan_amount,scheme,fee_no_vat)%>%
+    mutate(loan_amount=format(loan_amount,big.mark = ",", decimal.mark = "."))
+
+df_summary2 <- data_frame("name"='Tổng giá trị',"scheme"='',"loan_amount"='',"fee_no_vat"=sum(df_summary$fee_no_vat))
+df_summary3 <- data_frame("name"='Thuế GTGT',"scheme"='',"loan_amount"='',"fee_no_vat"=sum(df_summary$fee_no_vat*0.1))
+df_summary4 <- data_frame("name"='Tổng tiền sau thuế',"scheme"='',"loan_amount"='',"fee_no_vat"=df_summary2$fee_no_vat+df_summary3$fee_no_vat)
+df_summary5 <- rbind(df_summary, df_summary2, df_summary3,df_summary4,fill = TRUE)
+
+```
+
+```{r include=FALSE}
+options(tinytex.verbose = TRUE)
+
+
+### FI info
+company <- "Công ty Tài chính TNHH MTV Lotte Việt Nam"
+address <- "Tầng 12A, Toà tháp tây, Lotte Center, Số 54 Liễu Giai, Phường Cống Vị, Quận Ba Đình, Thành phố Hà Nội, Việt Nam"
+title <- "Ông"
+name <- "HAN SEOK WON"
+position <- "Giám đốc khối kế hoạch kinh doanh tài chính và kế toán"
+contract_no <- "01/HĐ/TRUSTINGSOCIAL-LOTTE"
+contract_signed_date <- "30/11/2018" 
+
+source(paste0('~/LG/lotte/Rmd',"/num_2_word_vn.R"))
+so_tien <- paste(num_2_word_vn(df_summary4$fee_no_vat),"đồng")
+```
+  
+  
+\begin{center}\fontsize{13pt}{14pt}\selectfont
+  \rmfamily\textbf{BIÊN BẢN XÁC NHẬN TÍNH PHÍ DỊCH VỤ}
+\end{center}
+
+\begin{center}\fontsize{13pt}{14pt}\selectfont
+  \rmfamily\textbf{TÌM KIẾM KHÁCH HÀNG KÊNH AVAY}
+\end{center}
+
+\begin{center}\normalsize
+  \rmfamily\textbf{Tháng `r mon`}
+\end{center}
+
+\vspace{12pt}
+
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily{Căn cứ theo hợp đồng số: `r contract_no` ký ngày `r contract_signed_date` và Phụ Lục 10 giữa:}
+\end{flushleft}
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily\textbf{BÊN A: CÔNG TY CỔ PHẦN TRUSTING SOCIAL}\\
+  \rmfamily{Địa chỉ: Tầng 8, Toà nhà Havana, 132 Hàm Nghi, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh.}\\
+  \rmfamily{Đại diện: Bà }
+  \rmfamily\textbf{TRẦN THỊ THẮM}\\
+  \rmfamily{Chức vụ: Trưởng Phòng Đối Soát}\\
+  \rmfamily{Theo Giấy ủy quyền số 0107/2023/GUQ/TSVN ngày 01/07/2023 của Giám đốc Công Ty Cổ phần Trusting Social.}\\
+\end{flushleft}
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily\textbf{BÊN B: `r str_to_upper(company)`}\\
+  \rmfamily{Địa chỉ: `r address`.}\\
+  \rmfamily{Đại diện:  }
+  \rmfamily\textbf{    }\\
+  \rmfamily{Chức vụ:   }\\
+\end{flushleft}
+
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily{Chúng tôi cùng xác nhận phí dịch vụ tìm kiếm khách hàng mà bên B phải trả như sau:}
+\end{flushleft}
+
+\vspace{6pt}
+
+
+
+```{r echo=FALSE, warning=FALSE}
+kable(df_summary5 %>% rename(`Dịch vụ`=name,`Mức phí dịch vụ`=scheme,`Tổng số tiền giải ngân`=loan_amount,`Phí dịch vụ`=fee_no_vat),booktabs = T,format.args = list(big.mark = ",",decimal.mark="."),align='l') %>% 
+  kable_styling(latex_options = c("hold_position","striped"),font_size = 7, full_width = F,row_label_position = "l") %>% 
+  row_spec(0,bold = T) %>% 
+    row_spec(nrow(df_summary5),bold = T,font_size = 7) %>% 
+  row_spec(nrow(df_summary5)-1,bold = T,font_size = 7) %>% 
+  row_spec(nrow(df_summary5)-2,bold = T,font_size = 7) 
+```
+
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily{Chi tiết xem bảng kê Lotte-Leadgen-AVAY-VNPT `r mon` đính kèm.}
+\end{flushleft}
+      
+
+
+ \vspace{20pt}
+
+
+|   \hspace{40pt}            **ĐẠI DIỆN BÊN A**    \hspace{150pt}                                 **ĐẠI DIỆN BÊN B**    
+|
+|
+|
+|
+|
+|
+|
+|
+|   \hspace{40pt}         **TRẦN THỊ THẮM**                        
+|   \rmfamily\textit{\hspace{27pt}Ngày  ....  tháng  ....  năm 2023}\rmfamily\textit{\hspace{125pt}Ngày  ....  tháng  ....  năm 2023}
+ 
+\vspace{80pt}
+
+
+
+
+\thispagestyle{empty}
+
+\pagebreak
+
+
+\begin{center}\fontsize{13pt}{14pt}\selectfont
+  \rmfamily\textbf{BIÊN BẢN XÁC NHẬN TÍNH PHÍ DỊCH VỤ}
+\end{center}
+
+\begin{center}\fontsize{13pt}{14pt}\selectfont
+  \rmfamily\textbf{TÌM KIẾM KHÁCH HÀNG KÊNH AVAY}
+\end{center}
+
+\begin{center}\normalsize
+  \rmfamily\textbf{Tháng `r mon`}
+\end{center}
+
+\vspace{12pt}
+
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+
+\rmfamily{Căn cứ theo hợp đồng số: `r contract_no` ký ngày `r contract_signed_date` và Phụ Lục 10 giữa:}
+\end{flushleft}
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily\textbf{BÊN A: CÔNG TY CỔ PHẦN TRUSTING SOCIAL}\\
+  \rmfamily{Địa chỉ: Tầng 8, Toà nhà Havana, 132 Hàm Nghi, Phường Bến Thành, Quận 1, Thành phố Hồ Chí Minh.}\\
+  \rmfamily{Đại diện: Bà }
+  \rmfamily\textbf{TRẦN THỊ THẮM}\\
+  \rmfamily{Chức vụ: Trưởng Phòng Đối Soát}\\
+  \rmfamily{Theo Giấy ủy quyền số 01/2022/GUQ/TSVN ngày 20/04/2022 của Giám đốc Công Ty Cổ Phần Trusting Social.}\\
+\end{flushleft}
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily\textbf{BÊN B: `r str_to_upper(company)`}\\
+  \rmfamily{Địa chỉ: `r address`.}\\
+  \rmfamily{Đại diện:  }
+  \rmfamily\textbf{    }\\
+  \rmfamily{Chức vụ:   }\\
+\end{flushleft}
+
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily{Chúng tôi cùng xác nhận phí dịch vụ tìm kiếm khách hàng mà bên B phải trả như sau:}
+\end{flushleft}
+
+\vspace{6pt}
+
+
+
+```{r echo=FALSE, warning=FALSE}
+kable(df_summary5%>%rename(`Dịch vụ`=name,`Mức phí dịch vụ`=scheme,`Tổng số tiền giải ngân`=loan_amount,`Phí dịch vụ`=fee_no_vat),booktabs = T,format.args = list(big.mark = ",",decimal.mark="."),align='l') %>% 
+  kable_styling(latex_options = c("striped"),font_size = 7, full_width =F,row_label_position = "l") %>% 
+  row_spec(0,bold = T) %>% 
+    row_spec(nrow(df_summary5),bold = T,font_size = 7) %>% 
+  row_spec(nrow(df_summary5)-1,bold = T,font_size = 7) %>% 
+  row_spec(nrow(df_summary5)-2,bold = T,font_size = 7) 
+```
+
+
+\begin{flushleft}\fontsize{10pt}{10pt}\selectfont
+  \rmfamily{Chi tiết xem bảng kê Lotte-Leadgen-AVAY-VNPT `r mon` đính kèm.}
+\end{flushleft}
+      
+
+
+
+ \vspace{20pt}
+
+
+|   \hspace{40pt}            **ĐẠI DIỆN BÊN A**    \hspace{150pt}                                 **ĐẠI DIỆN BÊN B**    
+|
+|
+|
+|
+|
+|
+|
+|
+|   \hspace{40pt}         **TRẦN THỊ THẮM**                        
+|   \rmfamily\textit{\hspace{27pt}Ngày .... tháng .... năm 2023}\rmfamily\textit{\hspace{125pt}Ngày .... tháng .... năm 2023}
+
+
+\vspace{80pt}
+
+
+
+
+\thispagestyle{empty}
+
+\pagebreak
+
+
+
+
+
+\begin{center}\fontsize{13pt}{14pt}\selectfont
+  \rmfamily\textbf{ĐỀ NGHỊ THANH TOÁN}
+\end{center}
+
+\begin{center}\fontsize{13pt}{14pt}\selectfont
+  \rmfamily{DỊCH VỤ TÌM KIẾM KHÁCH HÀNG KÊNH AVAY THÁNG `r mon`}
+\end{center}
+\vspace{11pt}
+\begin{flushright}\fontsize{11pt}{11pt}\selectfont
+  \rmfamily\textit{Tp. Hồ Chí Minh, ngày \hspace{10pt} tháng \hspace{10pt} năm 2023}
+\end{flushright}
+\vspace{11pt}
+\begin{flushleft}\fontsize{12pt}{12pt}\selectfont
+  \rmfamily{Kính gửi:    }
+  \rmfamily\textbf{      }\\
+  \rmfamily{Đơn vị: `r str_to_upper(company)`}\\
+  \rmfamily{Địa chỉ: `r address`}\\
+  \rmfamily{Nội dung: }
+  \rmfamily\textbf{Thanh toán phí dịch vụ tìm kiếm khách hàng kênh Avay (Thuê bao Vinaphone) tháng `r mon`}\\
+  \vspace{11pt}
+  \rmfamily{Căn cứ Hợp đồng cung cấp sản phẩm số `r contract_no` và Phụ Lục 10.}\\
+  \vspace{11pt}
+  \rmfamily{Căn cứ vào Biên bản xác nhận tính phí dịch vụ đã được xác nhận của hai bên, nay Công ty Cổ Phần Trusting Social đề nghị thanh toán theo hợp đồng số tiền: }
+  \rmfamily\textbf{`r format(sum(df_summary4$fee_no_vat),big.mark = ",", decimal.mark = ".")[1] ` VND}\\
+  \rmfamily{Số tiền bằng chữ: }
+  \rmfamily\textbf{`r so_tien`}\\
+  \vspace{11pt}
+  \rmfamily{Đề nghị thanh toán số tiền trên cho chúng tôi theo thông tin sau:}\\
+  \vspace{11pt}
+  \rmfamily{Đơn vị thụ hưởng: }
+  \rmfamily\textbf{CÔNG TY CỔ PHẦN TRUSTING SOCIAL }\\
+  \rmfamily{Địa chỉ: }
+  \rmfamily{Tầng 8, Toà nhà Havana, 132 Hàm Nghi, Phường Bến Thành, Quận 1, TP.HCM}\\
+  \rmfamily{Tài khoản số: }
+  \rmfamily\textbf{1912 9999 86 6666}\\
+  \rmfamily{Tại: }
+  \rmfamily{Ngân hàng TMCP Kỹ thương Việt Nam Trung tâm giao dịch Hội sở}\\
+\end{flushleft}
+\begin{flushright}\fontsize{12pt}{12pt}\selectfont
+  \rmfamily\textbf{CÔNG TY CỔ PHẦN TRUSTING SOCIAL}\\
+  \vspace{100pt}
+\end{flushright}
+
+|         \hspace{270pt}            **TRẦN THỊ THẮM**    
+
+
+\vspace{30pt}
+
+
+
+
+
+\thispagestyle{empty}
+
+```{r include=FALSE}
+rm(list=ls())
+```
+

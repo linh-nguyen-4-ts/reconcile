@@ -1,0 +1,67 @@
+---
+classoption: portrait
+geometry: left=1cm,right=1cm,top=2cm,bottom=2cm
+header-includes:
+  \usepackage{vntex}
+  \usepackage{longtable}
+  \usepackage{fancyhdr}
+  \pagestyle{fancy}
+  \fancyhead[CO,CE]{LEAD GENERATION DETAIL REPORT-SCORE LEAD}
+  \fancyhead[R]{Số Mcredit-2023-06}
+output:
+  pdf_document: default 
+  word_document: 
+  html_document:
+  df_print: paged
+mainfont: Times New RomanBang
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, r,echo=FALSE}
+options(scipen=99)
+options(scipen=99)
+library(dplyr)
+library(stringr)
+library(readxl)
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(RPostgreSQL)
+library(knitr)
+library(kableExtra)
+library(pander)
+library(janitor)
+library(openxlsx)
+rm(list=ls())
+path = '/home/linhnguyen/04.Reconcile/01.Mcredit/2023-06'
+local_path= path
+
+sum_func <- function(z) if (is.numeric(z)) round(sum(z),0) else ''
+sum_vat <- function(z) if (is.numeric(z)) round(sum(z)*0.1,0) else ''
+sum_fee_vat <- function(z) if (is.numeric(z)) round(sum(z)*1.1,0) else ''
+
+# Load data
+df_score <- readr::read_csv(paste0(local_path,'/df_score.csv')) %>% data.table()
+df_score %<>% mutate(DATE=as.character.Date(DATE))
+
+detail = df_score
+detail %<>%mutate(LEAD_ID=as.character(LEAD_ID),SO_HOP_DONG=as.character(SO_HOP_DONG)) %<>% select(-1)
+detail %>% data.table() 
+```
+
+```{r echo=FALSE, warning=FALSE}
+
+sumrow <- as.data.frame(lapply(detail, sum_func)) %>% data.table()
+VAT <- as.data.frame(lapply(detail, sum_vat))%>% data.table()
+sum_inc_VAT <-as.data.frame(lapply(detail, sum_fee_vat))%>% data.table()
+
+kable(rbind(cbind(' '=' ', detail),
+           cbind(' '='TOTAL', sumrow),
+           cbind(' '='VAT',VAT),
+           cbind(' '='TOTAL AFTER VAT',sum_inc_VAT),fill=T), "latex", booktabs = T,format.args = list(big.mark = ","),align='l',longtable = TRUE,row.names = TRUE) %>% 
+kable_styling(latex_options = c("hold_position", "repeat_header"),font_size = 10, full_width =F,row_label_position = "c") %>% 
+row_spec(0,bold = T)
+```
+
+```{r include=FALSE}
+rm(list=ls())
+```

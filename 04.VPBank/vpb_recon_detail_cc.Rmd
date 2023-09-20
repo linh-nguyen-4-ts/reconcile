@@ -1,0 +1,84 @@
+---
+classoption: portrait
+geometry: left=2cm,right=2cm,top=3cm,bottom=3cm
+header-includes:
+        \usepackage{vntex}
+        \usepackage{longtable}
+        \usepackage{fancyhdr}
+        \pagestyle{fancy}
+        \fancyhead[C]{BẢNG KÊ DỊCH VỤ TÌM KIẾM KHÁCH HÀNG}
+        \fancyhead[R]{Số VPB-2023-07}
+mainfont: Times New Roman
+output:
+  pdf_document: 
+    includes:
+      in_header: 
+  word_document: default
+---
+
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, r,echo=FALSE}
+
+options(scipen=99)
+library(dplyr)
+library(readxl)
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(knitr)
+library(kableExtra)
+library(pander)
+library(stringr)
+library(janitor)
+library(latexpdf)
+rm(list=ls())
+
+###!!!! always need to change
+report_mon <- format(Sys.Date()-30,'%Y-%m')
+mon = paste0(substr(report_mon,6,7),"-",substr(report_mon,1,4))
+
+#local_path = '/home/baokhanh/vpb/'
+#path = paste0(local_path,report_mon)
+#file_recon <- paste0(path,"/vpb_converted_",report_mon,"_recon_cycle.xlsx")
+#load(paste0(path,"/df_cc.RData"))
+#cc_tp <- read_excel(file_recon,sheet = "cc_tp") %>% 
+  #select(contract_no,customer_name,disbursed_date,new_price_vat,new_price_exc_vat) %>% 
+  #rename(fee_w_vat=new_price_vat,fee_no_vat= new_price_exc_vat  ) %>% 
+  #data.table()
+#cc_tp$disbursed_date <- strftime(cc_tp$disbursed_date,format = '%d-%m-%Y')
+#cc_tp <- left_join(cc_tp,df_cc%>%select(contract_no,product_detail),by="contract_no")
+#cc_tp %<>%select(customer_name,product_detail,disbursed_date,fee_w_vat,fee_no_vat)
+
+cc_hq <- read.csv('/home/linhnguyen/04.Reconcile/04.VPBank/vpb_converted_cycle_report_cc.csv') %>% 
+  select(contract_no,customer_name,national_id,disbursed_date,new_price_vat,new_price_exc_vat) %>% 
+  rename(fee_w_vat=new_price_vat,fee_no_vat= new_price_exc_vat) %>% 
+  data.table()
+df_cc_rdata <- read.csv('/home/linhnguyen/04.Reconcile/04.VPBank/df_cc_rdata.csv')
+#cc_hq %>% select(fee_no_vat) %>% sum()
+cc_hq$disbursed_date <- strftime(cc_hq$disbursed_date,format = '%d-%m-%Y')
+cc_hq = left_join(cc_hq,
+                   df_cc_rdata%>%select(contract_no,product_detail),
+                   by="contract_no")
+#cc_hq %<>% select(customer_name,national_id,product_detail,disbursed_date,fee_w_vat,fee_no_vat) %<>% distinct() -- dedup
+cc_hq %<>% select(contract_no,product_detail,disbursed_date,fee_w_vat,fee_no_vat)
+```
+ \begin{flushleft}\fontsize{13pt}{14pt}\selectfont
+  \rmfamily\textbf{CHI TIẾT THẺ CC HQ}
+ \end{flushleft}
+```{r echo=FALSE, warning=FALSE}
+  if (nrow(cc_hq)>0){ 
+   kable(cc_hq %>% adorn_totals() %>%
+         set_colnames(c("contract_no","product_detail","disbursed_date","fee_w_vat","fee_no_vat")) %>% 
+         data.table(),
+   "latex", booktabs = T,format.args = list(big.mark = ".",decimal.mark=","),align='l',longtable = TRUE,row.names = TRUE) %>%  
+    kable_styling(latex_options = c("hold_position", "repeat_header"),font_size = 6, full_width =F,row_label_position = "c") %>%  
+      row_spec(0,bold = T) %>%  
+  row_spec(nrow(cc_hq)+1,bold = T)
+  }
+```
+
+
+```{r include=FALSE}
+rm(list=ls())
+```

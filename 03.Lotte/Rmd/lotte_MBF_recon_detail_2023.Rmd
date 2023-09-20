@@ -1,0 +1,71 @@
+
+---
+classoption: portrait
+geometry: left=2cm,right=1.7cm,top=2cm,bottom=2cm
+header-includes: \usepackage{vntex} 
+                 \usepackage{fancyhdr} 
+                 \usepackage{longtable} 
+                 \pagestyle{fancy}
+                 \fancyhead[L]{LEAD GENERATION DETAIL REPORT 07/2023 SMS-MOBIFONE}
+                 \fancyhead[R]{Số Lotte-Leadgen-2023-07}
+mainfont: Times New Roman
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+  
+```{r message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE, r,echo=FALSE}
+options(scipen=99)
+library(dplyr)
+library(readxl)
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(knitr)
+library(kableExtra)
+library(pander)
+library(stringr)
+library(janitor)
+library(latexpdf)
+tinytex::install_tinytex()
+
+
+rm(list=ls())
+path = "~/LG/lotte/Rmd"
+this_month = format(Sys.Date()-30,'%Y-%m') 
+file_recon <- paste0("/home/linhnguyen/04.Reconcile/03.Lotte/2023-07/lotte_mbf_disbursed_2023-07.csv")
+
+sum_func <- function(z) if (is.numeric(z)) round(sum(z),0) else ''
+sum_vat <- function(z) if (is.numeric(z)) round(sum(z)*0.1,0) else ''
+sum_fee_vat <- function(z) if (is.numeric(z)) round(sum(z)*1.1,0) else ''
+
+detail <- read.csv(file_recon) %>% data.table()%>% select (-score_range)
+detail$lead_id <- as.character(detail$lead_id)
+detail %<>% mutate (fee_with_vat = price*1.1) %>% rename (fee_no_vat = price)
+detail$disbursed_date <-  as.character(detail$disbursed_date)
+```
+
+```{r echo=FALSE, warning=FALSE}
+
+sumrow <- as.data.frame(lapply(detail, sum_func)) %>% data.table()
+VAT <- as.data.frame(lapply(detail, sum_vat))%>% data.table()
+sum_inc_VAT <-as.data.frame(lapply(detail, sum_fee_vat)) %>% data.table()
+
+kable(rbind(cbind(' '=' ', detail),
+           cbind(' '='TOTAL', sumrow),fill=T)
+      , "latex", booktabs = T,format.args = list(big.mark = ","),align='l',longtable = TRUE,row.names = TRUE) %>% 
+kable_styling(latex_options = c("hold_position", "repeat_header"),font_size = 6, full_width =F,row_label_position = "c") %>% 
+row_spec(0,bold = T)
+
+#kable(rbind(cbind(' '=' ', detail),
+#           cbind(' '='TOTAL', sumrow),
+#           cbind(' '='TOTAL AFTER VAT',sum_inc_VAT),fill=T ), "latex", booktabs = T,format.args = list(big.mark = ","),align='l',longtable = TRUE,row.names = TRUE) %>% 
+#kable_styling(latex_options = c("hold_position", "repeat_header"),font_size = 9, full_width =F,row_label_position = "c") %>% 
+#row_spec(0,bold = T)
+```
+
+```{r include=FALSE}
+rm(list=ls())
+```
