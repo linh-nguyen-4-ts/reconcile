@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.8.20)  21 AUG 2023 10:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.26)  26 SEP 2023 11:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **lotte_MBF_recon_detail_2023.tex
 (./lotte_MBF_recon_detail_2023.tex
 LaTeX2e <2023-06-01> patch level 1
-L3 programming layer <2023-08-11>
+L3 programming layer <2023-08-29>
 (/home/linhnguyen/.TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
 (/home/linhnguyen/.TinyTeX/texmf-dist/tex/latex/base/size10.clo
@@ -716,35 +716,27 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [1{/home/linhnguyen/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/linhnguyen/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-t5.enc}
 
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 12.06001pt, for example:
-(fancyhdr)                \setlength{\headheight}{12.06001pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-0.06001pt}.
-
-[2] (./lotte_MBF_recon_detail_2023.aux)
+] (./lotte_MBF_recon_detail_2023.aux)
  ***********
 LaTeX2e <2023-06-01> patch level 1
-L3 programming layer <2023-08-11>
+L3 programming layer <2023-08-29>
  ***********
 Package rerunfilecheck Info: File `lotte_MBF_recon_detail_2023.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 12984 strings out of 477149
- 197632 string characters out of 5812949
- 1997254 words of memory out of 5000000
- 33801 multiletter control sequences out of 15000+600000
+ 12983 strings out of 476888
+ 197626 string characters out of 5808652
+ 1926791 words of memory out of 5000000
+ 34058 multiletter control sequences out of 15000+600000
  583036 words of font info for 42 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,11n,79p,422b,568s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/linhnguyen/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx6.pfb></home/linhnguyen/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/linhnguyen/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb></home/linhnguyen/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri7.pfb>
-Output written on lotte_MBF_recon_detail_2023.pdf (2 pages, 96004 bytes).
+ 75i,11n,79p,422b,438s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/linhnguyen/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx6.pfb></home/linhnguyen/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/linhnguyen/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb>
+Output written on lotte_MBF_recon_detail_2023.pdf (1 page, 80064 bytes).
 PDF statistics:
- 39 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
- 4 named destinations out of 1000 (max. 500000)
+ 30 PDF objects out of 1000 (max. 8388607)
+ 20 compressed objects within 1 object stream
+ 3 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

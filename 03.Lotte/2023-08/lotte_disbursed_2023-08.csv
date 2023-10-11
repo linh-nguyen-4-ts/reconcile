@@ -1,0 +1,4 @@
+bank_code,lead_id,phone_number,batch_date,channel,product_code,nid,telco_code,tenor,loan_amount,disbursed_date,fee_rate,commission,disbursed_status,update_at,lead_source
+lotte,14222606,84939190955,2023-07-21,SMS,LOTTE03,093083010048,mobifone,,20000000,2023-08-02 00:00:00,0.055,1100000,reconciled,2023-09-26 11:32:06.161655,
+lotte,14169551,84908583330,2023-06-15,SMS,LOTTE03,079083019379,mobifone,,50000000,2023-08-14 00:00:00,0.055,2750000,reconciled,2023-09-26 11:32:06.161655,
+lotte,14173732,84939060391,2023-06-16,SMS,LOTTE03,079093006651,mobifone,,50000000,2023-08-18 00:00:00,0.055,2750000,reconciled,2023-09-26 11:32:06.161655,

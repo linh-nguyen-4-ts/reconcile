@@ -6,8 +6,8 @@ header-includes: \usepackage{vntex}
                  \usepackage{fancyhdr} 
                  \usepackage{longtable} 
                  \pagestyle{fancy}
-                 \fancyhead[L]{LEAD GENERATION DETAIL REPORT 07/2023 SMS-MOBIFONE}
-                 \fancyhead[R]{Số Lotte-Leadgen-2023-07}
+                 \fancyhead[L]{LEAD GENERATION DETAIL REPORT 08/2023 SMS-MOBIFONE}
+                 \fancyhead[R]{Số Lotte-Leadgen-2023-08}
 mainfont: Times New Roman
 output:
   pdf_document: default
@@ -34,8 +34,8 @@ tinytex::install_tinytex()
 
 rm(list=ls())
 path = "~/LG/lotte/Rmd"
-this_month = format(Sys.Date()-30,'%Y-%m') 
-file_recon <- paste0("/home/linhnguyen/04.Reconcile/03.Lotte/2023-07/lotte_mbf_disbursed_2023-07.csv")
+this_month = format(Sys.Date()-45,'%Y-%m') 
+file_recon <- paste0("/home/linhnguyen/04.Reconcile/03.Lotte/2023-08/lotte_mbf_disbursed_2023-08.csv")
 
 sum_func <- function(z) if (is.numeric(z)) round(sum(z),0) else ''
 sum_vat <- function(z) if (is.numeric(z)) round(sum(z)*0.1,0) else ''

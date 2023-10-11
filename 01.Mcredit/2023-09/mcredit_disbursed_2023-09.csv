@@ -1,0 +1,3 @@
+bank_code,lead_id,phone_number,batch_date,channel,product_code,nid,telco_code,tenor,loan_amount,disbursed_date,fee_level,commission,lead_source
+mcredit,14173908,841688295625,2023-06-17,sms,VT37,,viettel,,21100000.0,2023-09-16,0.05,1055000,
+mcredit,14104167,841675561496,2023-05-24,avay,VT37,,viettel,,21100000.0,2023-09-19,0.05,1055000,Viettel Pay
